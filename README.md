@@ -18,7 +18,7 @@ Here are some ideas to get you started:
 <a href="https://www.gitanimals.org/en_US?utm_medium=image&utm_source=brighteen&utm_content=farm">
 <img
   src="https://render.gitanimals.org/farms/brighteen"
-  width="100"
-  height="70"
+  width="600"
+  height="300"
 />
 </a>
