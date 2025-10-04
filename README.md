@@ -43,6 +43,7 @@ Here are some ideas to get you started:
 ---
 
 ## What I Wish Someone Had Told Me
+by Sam Altman
 
 1. Optimism, obsession, self-belief, raw horsepower and personal connections are how things get started.  
 낙관주의, 집요함, 자기 확신, 추진력, 그리고 좋은 인맥이 모든 일의 시작이다.
