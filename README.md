@@ -1,6 +1,6 @@
 ## Hi there 👋
 
-### Hi there, I'm [이름] 👋
+### Hi there, I'm [MyeongGu Yeo] 👋
 
 저는 데이터의 숨겨진 구조(representation)를 학습하여 기존의 경계를 넘어서는 **창의적인 AI**를 만드는 데 기여하고 싶은 연구자입니다. 
 
@@ -46,31 +46,6 @@ I'm a researcher focused on **Generative Models** and **Representation Learning*
 
 ---
 
-<!--
-**brighteen/brighteen** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
-[![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/seong-yun-byeon-8183a8113/)](https://www.linkedin.com/in/seong-yun-byeon-8183a8113/) 
-[![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://www.youtube.com/c/kyleschool)](https://www.youtube.com/c/kyleschool) 
-[![Facebook Badge](https://img.shields.io/badge/-Facebook-1877f2?style=flat-square&logo=facebook&logoColor=white&link=https://www.facebook.com/zzsza)](https://www.facebook.com/zzsza) 
-[![Instagram Badge](https://img.shields.io/badge/-Instagram-dd2a7b?style=flat-square&logo=instagram&logoColor=white&link=https://www.instagram.com/data.scientist/)](https://www.instagram.com/data.scientist/) 
-
-[![Tech Blog Badge](http://img.shields.io/badge/-Tech%20blog-black?style=flat-square&logo=github&link=https://brighteen.github.io/)](https://brighteen.github.io/) 
-[!](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)]
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://brighteen.github.io/)] 
-[![Gmail Badge](https://img.shields.io/badge/-Gmail-d14836?style=flat-square&logo=Gmail&logoColor=white&link=mailto:brightmgu@gmail.com)](mailto:brightmgu@gmail.com)
-
--->
-
 <div align=center>
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
@@ -78,12 +53,9 @@ Here are some ideas to get you started:
 [![Gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:brightmgu@gmail.com)
 </div>
 
-
 ---
 
 [If you want to see my pets, come here](https://github.com/brighteen/brighteen/blob/main/my%20pets.md)
-
----
 
 [What I Wish Someone Had Told Me](https://github.com/brighteen/brighteen/blob/main/What%20I%20Wish%20Someone%20Had%20Told%20Me.md)
 
