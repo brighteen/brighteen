@@ -86,7 +86,7 @@ AI 기술을 통해 현실의 문제를 정의하고 해결하는 데 깊은 흥
 
 ## **5. Skills (보유 기술)**
 
-* **Programming Languages:** Python, SQL(Basic)
+* **Programming Languages:** Python
 * **AI / ML Frameworks:** PyTorch, Scikit-learn
 * **Libraries:** NumPy, Pandas, Matplotlib, OpenCV
 * **Tools:** Git, GitHub, VSCode
