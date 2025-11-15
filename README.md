@@ -1,64 +1,52 @@
 ### 👋 About Me
 
-I'm a researcher on a quest to answer a fundamental question: **How can we guide AI to transcend imitation and achieve true creation?**
+I'm a researcher driven by a fundamental question: **How do artificial neural networks truly understand and structure our world?**
 
-While modern generative models are phenomenal at recreating what they've seen, they often struggle to venture beyond the boundaries of their training data. They are masters of interpolation, but novices at extrapolation. My work is driven by the conviction that the key to unlocking true machine creativity lies not in the data points themselves, but in the infinite, unexplored spaces *between* them.
-
----
-
-### 🔭 My Research Philosophy: Exploring the "Latent Universe"
-
-My core research is an attempt to map and expand this "latent universe." I believe we can teach models to be more creative by explicitly showing them the connections and pathways that exist on the data manifold.
-
-My current framework centers on **Manifold Augmentation within the Latent Space**.
-> Instead of just feeding a model with discrete data points, I first build a rich, semantic map of the data using a VAE. Then, I generate new, meaningful "hybrid" data by interpolating between points on this map. By training a Diffusion Model on this augmented reality, the model learns not just to memorize destinations (the original data), but how to navigate the journeys *between* them. The result is a model with a demonstrably enhanced ability to **extrapolate into novel styles and concepts**.
+My fascination lies not with any single model, but with the "internal world" they all build—the **latent and embedding spaces** where raw data is transformed into abstract meaning. Whether it's a VAE, GAN, or a Large Language Model, they all create a complex 'map' of concepts. My work is dedicated to becoming a cartographer of this hidden "geometry of knowledge."
 
 ---
 
-### 🌱 Beyond Theory: A Mission for Real-World Impact
+### 🔭 My Research Philosophy: Mapping the "Geometry of Knowledge"
 
-This pursuit of creative AI is not just a theoretical exercise for me. I am passionate about channeling these advancements to solve tangible, human-centric problems.
+I believe that to build truly robust and creative AI, we must first understand the fundamental structure of these learned representations. My research explores this from the ground up:
 
-A significant part of my focus is on **Data-Centric AI for Medical Imaging**. The same techniques used to create novel artistic styles can be used to generate synthetic data for rare diseases or to rebalance skewed datasets. I believe that by creating more robust and diverse data, we can build fairer and more accurate diagnostic tools, ultimately contributing to human well-being.
+* **How are concepts connected?** I investigate the pathways *between* data points on the learned manifold. Why does a simple, straight-line path between two concepts (like `z_A` and `z_B`) often "fall off" this manifold into a "hole" of nonsensical artifacts?
+* **How can we navigate this space reliably?** A core part of my research is developing algorithms that can intelligently traverse this high-dimensional space, finding reliable paths that stay on the "highways" of learned concepts. This involves using the model's own understanding (like its internal gradients or scores) to guide the journey.
+* **How can we extrapolate beyond the map?** Beyond just navigating the *known*, I am deeply interested in how we can use this learned structure to **extrapolate**—to guide the model to create novel concepts that lie beyond the precise boundaries of its training data.
 
-**In short, my work is a journey to transform generative models from being mere 'imitators' to becoming 'imaginative collaborators' that can help us solve real-world challenges.**
+Ultimately, my goal is to move beyond treating these models as 'black boxes'. By fundamentally understanding **how they represent information**, we can unlock their true potential for robust, controllable, and creative applications—from generating synthetic medical data to pushing the boundaries of art.
 
 #### **My Key Interests & Toolbox**
-* **Generative Models**: Diffusion Models, VAEs, Controllable Generation, Creative Extrapolation
-* **Representation Learning**: Manifold Learning, Disentangled Representations, Self-Supervised Learning
-* **Data-Centric AI**: Latent Space Augmentation, Synthetic Data Generation, Long-Tailed Recognition
+* **Representation Learning**: Manifold Learning, Geometry of Knowledge, Disentanglement
+* **Generative Models**: Latent Space Navigation (Interpolation/Extrapolation), Diffusion Models, VAEs/AAEs
+* **Core Mechanisms**: Score-Based Guidance, Embedding Space Analysis, Gradient-Based Optimization
+* **Applications**: Data-Centric AI, Medical Image Augmentation, Controllable Generation
 
 ---
 
 ### 👋 소개
 
-저는 "**어떻게 하면 인공지능이 모방을 넘어 진정한 창조의 영역에 도달할 수 있을까?**"라는 근본적인 질문에 대한 답을 찾아가는 연구자입니다.
+안녕하세요. 저는 "**인공신경망은 세상을 어떻게 진정으로 이해하고 구조화하는가?**"라는 근본적인 질문에 이끌려 연구를 진행하고 있습니다.
 
-현대의 생성 모델은 학습한 데이터를 놀라울 정도로 잘 재현하지만, 그 데이터의 경계를 넘어서는 데에는 종종 어려움을 겪습니다. 데이터 분포 안에서의 '보간(interpolation)'에는 능숙하지만, 분포 밖으로의 '외삽(extrapolation)'에는 미숙합니다. 저는 기계의 진정한 창의성을 여는 열쇠가 데이터 포인트 그 자체가 아니라, 그들 사이에 존재하는 무한하고 미개척된 공간에 있다고 믿습니다.
-
----
-
-### 🔭 저의 연구 철학: "잠재 세계"의 탐험
-
-저의 핵심 연구는 이 "잠재 세계(Latent Universe)"의 지도를 그리고 확장하려는 시도입니다. 데이터 다양체(manifold) 위에 존재하는 연결과 경로를 명시적으로 보여줌으로써, 모델이 더 창의적으로 될 수 있도록 가르칠 수 있다고 생각합니다.
-
-현재 저의 프레임워크는 **잠재 공간에서의 다양체 증강(Manifold Augmentation)**에 중점을 둡니다.
-> 저는 모델에게 개별 데이터 포인트를 그대로 주입하는 대신, 먼저 VAE를 이용해 데이터의 풍부한 의미론적 지도를 구축합니다. 그 후, 이 지도 위의 점들을 보간하여 의미있는 새로운 '융합 데이터'를 생성합니다. 이렇게 증강된 현실 속에서 확산 모델을 학습시킴으로써, 모델은 단순히 목적지(원본 데이터)를 암기하는 것을 넘어, 목적지 사이의 여정을 탐색하는 법을 배우게 됩니다. 그 결과, **이전에 없던 새로운 스타일과 개념으로 외삽하는 능력이 눈에 띄게 향상된 모델**이 탄생합니다.
+저의 관심은 특정 모델 하나가 아닌, 모든 모델이 구축하는 '내면의 세계', 즉 원본 데이터가 추상적인 의미로 변환되는 **잠재 공간(latent space)과 임베딩 공간(embedding space)** 그 자체에 있습니다. VAE, GAN, 혹은 거대 언어 모델(LLM)에 이르기까지, 이 모델들은 모두 개념에 대한 복잡한 '내면의 지도'를 만듭니다. 제 연구는 이 숨겨진 **'지식의 기하학(geometry of knowledge)'**의 지도를 그리는 탐험가(cartographer)가 되는 과정입니다.
 
 ---
 
-### 🌱 이론을 넘어: 현실 세계에 기여하고자 하는 사명
+### 🔭 저의 연구 철학: '지식의 기하학' 지도 그리기
 
-이러한 창의적 AI를 향한 탐구는 제게 단순한 이론적 호기심이 아닙니다. 저는 이 기술들을 실질적이고 인간 중심적인 문제를 해결하는 데 사용하는 것에 큰 열정을 가지고 있습니다.
+저는 진정으로 견고하고 창의적인 AI를 만들려면, 먼저 이 학습된 표현 공간의 근본적인 구조를 이해해야 한다고 믿습니다. 제 연구는 이 구조를 가장 밑바닥부터 탐구합니다.
 
-제 연구의 중요한 부분 중 하나는 **의료 영상을 위한 데이터 중심 AI(Data-Centric AI)** 입니다. 새로운 예술적 스타일을 만드는 데 사용된 동일한 기술은 희귀 질병에 대한 합성 데이터를 생성하거나 불균형한 데이터셋의 균형을 맞추는 데 사용될 수 있습니다. 더 견고하고 다양한 데이터를 만들어냄으로써, 우리는 더 공정하고 정확한 진단 도구를 구축하고 궁극적으로 인류의 복지에 기여할 수 있다고 믿습니다.
+* **개념들은 어떻게 연결되어 있는가?** 저는 학습된 다양체(manifold) 위에서 데이터 포인트 *사이*의 경로를 탐구합니다. 왜 두 개념(`z_A`와 `z_B` 등) 사이의 단순한 직선 경로는 종종 이 다양체를 '이탈'하여 의미 없는 '공백(hole)'으로 빠져드는 것일까요?
+* **이 공간을 어떻게 신뢰하며 탐색할 수 있는가?** 제 연구의 핵심 중 하나는 이 고차원 공간을 지능적으로 탐색하는 알고리즘을 개발하는 것입니다. 모델이 학습한 '개념의 고속도로' 위에 머무르며 안정적인 경로를 찾는 것이죠. 여기에는 모델 자신의 이해(내부 그래디언트나 스코어)를 나침반으로 삼는 방식이 포함됩니다.
+* **지도 밖으로 어떻게 나아갈 수 있는가?** 저는 단순히 *알려진* 영역을 탐색하는 것을 넘어, 이 학습된 구조를 활용하여 **외삽(extrapolate)**하는 방법에 깊은 관심을 두고 있습니다. 즉, 모델이 학습한 데이터의 경계를 넘어 새로운 개념을 창조하도록 유도하는 것입니다.
 
-**요약하자면, 제 연구는 생성 모델을 단순한 '모방가'에서 현실의 난제를 해결하는 데 도움을 주는 '상상력 풍부한 협업 파트너'로 변화시키기 위한 여정입니다.**
+궁극적으로 제 목표는 이 모델들을 '블랙박스'로 취급하는 것을 넘어서는 것입니다. **모델이 정보를 표현하는 방식 자체를 근본적으로 이해**함으로써, 우리는 비로소 견고하고, 제어 가능하며, 창의적인 AI의 잠재력을 최대로 이끌어낼 수 있을 것입니다. 이는 의료 영상 데이터를 생성하는 것부터 예술의 경계를 넓히는 일까지 모든 영역에 걸쳐있습니다.
 
 #### **주요 관심 분야 및 기술**
-* **생성 모델**: 확산 모델, VAE, 제어 가능한 생성, 창의적 외삽
-* **표현 학습**: 다양체 학습, 분리된 표현 학습, 자기지도학습
-* **데이터 중심 AI**: 잠재 공간 증강, 합성 데이터 생성, 긴 꼬리 분포 인식
+* **표현 학습**: 다양체 학습, 지식의 기하학, 분리된 표현 학습
+* **생성 모델**: 잠재 공간 탐색 (보간/외삽), 확산 모델, VAE/AAE
+* **핵심 원리**: 스코어 기반 유도, 임베딩 공간 분석, 그래디언트 기반 최적화
+* **응용 분야**: 데이터 중심 AI, 의료 영상 증강, 제어 가능한 생성
 
 ---
 <div align=center>
