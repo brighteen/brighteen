@@ -1,4 +1,6 @@
 gitignore
+assets
+assets/
 
 .venv/
 __pycache__/
