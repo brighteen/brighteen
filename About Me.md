@@ -1,3 +1,5 @@
+![me](assets/me.png)
+
 ### 👋 About Me
 
 인공지능을 전공하며 모델의 본질은 내면의 수학적 원리에 기초해있다고 생각합니다. 따라서 기초 수학에 대한 이해가 필요조건이라 여기기 때문에 그 부분을 공부하고 있습니다. 현재 집합론, 선형대수, 해석기하학을 공부중이며, 곧 미분기하학도 공부할 거에요. 참고로 Mathematics for Machine Learning (Deisenroth, Faisal, Ong) 책을 보고 공부하고 있습니다. 
