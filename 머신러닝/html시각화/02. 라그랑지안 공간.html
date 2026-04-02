@@ -1,0 +1,148 @@
+'''
+이 코드는 제약 있는 최적화 문제가 라그랑주 승수법을 통해 어떻게 기하학적으로 변환되는지 보여주는 시각화입니다.
+이전 대화에서 논의한 "원공간(Primal Space)의 최소화 문제가, 확장 공간(Augmented Space)의 최소-최대(Min-Max) 안장점 문제로 변환된다"는 대수학적 팩트를 Plotly.js를 이용해 2D와 3D로 구현했습니다.
+
+[달라진 점 / 구현 핵심]
+1. 원 문제 (2D): 목적 함수 f(x) = x^2 와 금지 구역(x < 1)을 회색으로 칠해 '하드 제약 조건'의 기하학적 한계를 시각화했습니다.
+2. 라그랑지안 (3D): 변수 x와 라그랑주 승수 λ를 두 축으로 삼는 3차원 곡면 L(x, λ) = x^2 + λ(1-x) 를 렌더링하여, 미분 불가능한 수직 벽이 어떻게 미분 가능한 '안장점(Saddle Point)' 지형으로 부드럽게 승격되는지 시각적으로 증명합니다.
+3. 최적해 도출: 두 공간 모두에서 수학적 최적점(x=1, λ=2)을 빨간색 점으로 매핑하여 차원의 진화에도 불구하고 동일한 해가 도출됨을 확인합니다.
+'''
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>라그랑주 승수법의 기하학적 차원 승격 시각화</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .container { width: 100%; max-width: 1200px; display: flex; flex-direction: row; gap: 20px; }
+        .plot-box { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        h1 { color: #2c3e50; font-size: 1.5rem; text-align: center; }
+        p { color: #555; text-align: center; font-size: 0.95rem; }
+        .plot-area { width: 100%; height: 500px; }
+    </style>
+</head>
+<body>
+
+    <h1>제약 있는 최적화와 라그랑지안 안장점(Saddle Point)</h1>
+    <p>목적 함수: $f(x) = x^2$, 제약 조건: $x \ge 1 \implies g(x) = 1-x \le 0$</p>
+
+    <div class="container">
+        <div class="plot-box">
+            <h2 style="text-align: center; color: #34495e; font-size: 1.2rem;">1. 원공간 (Primal Space)</h2>
+            <div id="plot2d" class="plot-area"></div>
+            <p>파라미터 x만 존재하는 공간. 금지 구역(회색)이라는 절대적인 벽에 가로막혀, f(x)의 원래 최솟값(0)에 가지 못하고 경계선(x=1)에 멈춰 섭니다.</p>
+        </div>
+
+        <div class="plot-box">
+            <h2 style="text-align: center; color: #34495e; font-size: 1.2rem;">2. 라그랑지안 공간 (Augmented Space)</h2>
+            <div id="plot3d" class="plot-area"></div>
+            <p>라그랑주 승수 λ축이 추가된 3차원 공간. 절대적인 벽 대신, 금지 구역에서 λ가 함수값을 무한대로 밀어 올리는 '안장점(Saddle Point)'이 형성됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. 2D 원공간 데이터 생성
+        const x2d = [];
+        const y2d = [];
+        for (let x = -1; x <= 3; x += 0.05) {
+            x2d.push(x);
+            y2d.push(Math.pow(x, 2));
+        }
+
+        const trace1 = {
+            x: x2d, y: y2d,
+            type: 'scatter', mode: 'lines',
+            line: { color: 'blue', width: 3 },
+            name: '목적 함수 f(x) = x²'
+        };
+
+        const feasibleRegion = {
+            x: [1, 3, 3, 1],
+            y: [-1, -1, 10, 10],
+            fill: 'toself', fillcolor: 'rgba(46, 204, 113, 0.2)',
+            line: { width: 0 },
+            name: '허용 구역 (x ≥ 1)'
+        };
+
+        const forbiddenRegion = {
+            x: [-1, 1, 1, -1],
+            y: [-1, -1, 10, 10],
+            fill: 'toself', fillcolor: 'rgba(231, 76, 60, 0.2)',
+            line: { width: 0 },
+            name: '금지 구역 (x < 1)'
+        };
+
+        const optimalPoint2D = {
+            x: [1], y: [1],
+            type: 'scatter', mode: 'markers',
+            marker: { color: 'red', size: 12, symbol: 'star' },
+            name: '최적해 (x*=1, f(x*)=1)'
+        };
+
+        const layout2D = {
+            xaxis: { title: '파라미터 x', range: [-1, 3] },
+            yaxis: { title: '함수값 f(x)', range: [-1, 9] },
+            showlegend: true, legend: { x: 0.1, y: 0.9 },
+            margin: { l: 50, r: 20, t: 30, b: 40 }
+        };
+
+        Plotly.newPlot('plot2d', [feasibleRegion, forbiddenRegion, trace1, optimalPoint2D], layout2D);
+
+        // 2. 3D 라그랑지안 공간 데이터 생성
+        // L(x, λ) = x^2 + λ(1 - x)
+        const x3d = [];
+        const y3d = []; // λ axis
+        const z3d = [];
+
+        const x_size = 50;
+        const y_size = 50;
+
+        for (let i = 0; i < y_size; i++) {
+            let lambda_val = (i / (y_size - 1)) * 4; // λ from 0 to 4
+            y3d.push(lambda_val);
+            let z_row = [];
+            for (let j = 0; j < x_size; j++) {
+                let x_val = -1 + (j / (x_size - 1)) * 4; // x from -1 to 3
+                if (i === 0) x3d.push(x_val);
+                
+                // 라그랑지안 수식 계산
+                let z_val = Math.pow(x_val, 2) + lambda_val * (1 - x_val);
+                z_row.push(z_val);
+            }
+            z3d.push(z_row);
+        }
+
+        const surfaceTrace = {
+            z: z3d, x: x3d, y: y3d,
+            type: 'surface',
+            colorscale: 'Viridis',
+            opacity: 0.8,
+            contours: {
+                z: { show: true, usecolormap: true, highlightcolor: "limegreen", project: { z: true } }
+            }
+        };
+
+        // 해석학적 최적점: x = 1, λ = 2 (이때 z = 1)
+        const optimalPoint3D = {
+            x: [1], y: [2], z: [1],
+            type: 'scatter3d', mode: 'markers',
+            marker: { color: 'red', size: 6, symbol: 'diamond' },
+            name: '안장점 (x*=1, λ*=2)'
+        };
+
+        const layout3D = {
+            scene: {
+                xaxis: { title: '파라미터 x' },
+                yaxis: { title: '라그랑주 승수 λ' },
+                zaxis: { title: '라그랑지안 L(x,λ)', range: [-2, 10] },
+                camera: { eye: { x: 1.5, y: -1.5, z: 1.2 } }
+            },
+            margin: { l: 0, r: 0, t: 0, b: 0 },
+            showlegend: false
+        };
+
+        Plotly.newPlot('plot3d', [surfaceTrace, optimalPoint3D], layout3D);
+    </script>
+</body>
+</html>

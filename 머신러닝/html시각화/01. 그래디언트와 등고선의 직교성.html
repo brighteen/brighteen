@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>그래디언트와 등고선 직교 시각화</title>
+    <style>
+        body { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background-color: #f8f9fa; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        canvas { 
+            background-color: #ffffff; 
+            border: 1px solid #ced4da; 
+            border-radius: 8px;
+            margin-top: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .description { 
+            max-width: 600px; 
+            margin-top: 20px; 
+            line-height: 1.6; 
+            color: #343a40; 
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <h2>등고선과 그래디언트 벡터의 직교성 (Orthogonality)</h2>
+    <canvas id="mathCanvas" width="600" height="600"></canvas>
+    <div class="description">
+        <p><strong>비선형 목적 함수:</strong> f(x, y) = x² + 2y²</p>
+        <p><strong>등고선 (파란색 선):</strong> 높이가 같은 지점들의 집합 (타원)</p>
+        <p><strong>접선 (초록색 선):</strong> 등고선 곡면의 순간적인 진행 방향</p>
+        <p><strong>그래디언트 (빨간색 화살표):</strong> ∇f = [2x, 4y]^T. 가장 가파른 오르막 방향</p>
+        <hr>
+        <p>위 그림에서 접선이 등고선을 뚷는 것처럼 보이지만, 바깥 곡선위에 한 점과 접해있는 선이다.</p>
+        <p>빨간 화살표(그래디언트)가 원점(최솟값)을 정조준하지 않고 빗겨 나가지만, 초록색 접선과는 모든 지점에서 완벽하게 <strong>90도(수직)</strong>를 이루고 있음을 기하학적으로 확인할 수 있습니다.</p>
+    </div>
+
+    <script>
+        /*
+        '''
+        목적 함수 f(x,y) = x^2 + 2y^2 의 등고선과 그래디언트 벡터를 그리는 HTML/Canvas 코드입니다.
+        이전 대화에서 증명했던 '등고선의 접선 벡터와 그래디언트 벡터의 내적이 0이 되어 항상 직교한다'는 
+        해석학적 사실을 기하학적으로 시각화하기 위해 작성되었습니다.
+        '''
+        */
+        const canvas = document.getElementById('mathCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const scale = 60; // 공간 스케일 배율
+        const originX = width / 2;
+        const originY = height / 2;
+
+        // 데카르트 좌표계를 캔버스 픽셀 좌표계로 변환
+        function toCanvasX(x) { return originX + x * scale; }
+        // y축은 캔버스에서 아래를 향하므로 수학적 시각화를 위해 반전시킵니다.
+        function toCanvasY(y) { return originY - y * scale; } 
+
+        // 1. 배경 그리드 및 x, y 축 렌더링
+        function drawGrid() {
+            ctx.strokeStyle = '#e9ecef';
+            ctx.lineWidth = 1;
+            for (let x = -width/2; x < width/2; x += scale) {
+                ctx.beginPath(); ctx.moveTo(originX + x, 0); ctx.lineTo(originX + x, height); ctx.stroke();
+            }
+            for (let y = -height/2; y < height/2; y += scale) {
+                ctx.beginPath(); ctx.moveTo(0, originY + y); ctx.lineTo(width, originY + y); ctx.stroke();
+            }
+            ctx.strokeStyle = '#adb5bd';
+            ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, height); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(width, originY); ctx.stroke();
+        }
+
+        // 2. 타원형 등고선 렌더링 (f(x,y) = c)
+        function drawContours() {
+            ctx.strokeStyle = 'rgba(13, 110, 253, 0.4)';
+            ctx.lineWidth = 2;
+            const c_values = [2, 6, 12, 20]; // 등고선 높이 상수 집합
+            
+            c_values.forEach(c => {
+                ctx.beginPath();
+                for (let angle = 0; angle <= Math.PI * 2; angle += 0.02) {
+                    // 타원의 매개변수 방정식 적용
+                    const a = Math.sqrt(c);
+                    const b = Math.sqrt(c / 2);
+                    const x = a * Math.cos(angle);
+                    const y = b * Math.sin(angle);
+                    
+                    if (angle === 0) ctx.moveTo(toCanvasX(x), toCanvasY(y));
+                    else ctx.lineTo(toCanvasX(x), toCanvasY(y));
+                }
+                ctx.closePath();
+                ctx.stroke();
+            });
+        }
+
+        // 3. 특정 점에서의 그래디언트 벡터와 접선 렌더링
+        function drawVectors() {
+            // 시각화를 위해 선정한 타원 위의 임의의 좌표들
+            const testPoints = [
+                {x: 1, y: 0.707},     // 1사분면
+                {x: -1.732, y: 1.22}, // 2사분면
+                {x: -2, y: -2},       // 3사분면
+                {x: 3.16, y: -2.23}   // 4사분면
+            ];
+
+            testPoints.forEach(p => {
+                const cx = toCanvasX(p.x);
+                const cy = toCanvasY(p.y);
+
+                // 그래디언트 벡터 연산 (편미분): [2x, 4y]
+                const gradX = 2 * p.x;
+                const gradY = 4 * p.y;
+                
+                // 벡터 크기 조정 (화면에 알맞게 출력하기 위함)
+                const vScale = 0.25;
+                const viewGradX = gradX * vScale;
+                const viewGradY = -gradY * vScale; // 캔버스 y축 반전 적용
+
+                // 접선 벡터 연산 (그래디언트와 내적이 0이 되도록 [-gradY, gradX] 적용)
+                const tangentX = -gradY * vScale * 1.2;
+                const tangentY = gradX * vScale * 1.2;
+
+                // 3-1. 등고선 접선 (초록색)
+                ctx.strokeStyle = 'rgba(25, 135, 84, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - tangentX*scale, cy - tangentY*scale);
+                ctx.lineTo(cx + tangentX*scale, cy + tangentY*scale);
+                ctx.stroke();
+                
+                // 3-2. 그래디언트 벡터 화살표 (빨간색)
+                ctx.strokeStyle = '#dc3545';
+                ctx.fillStyle = '#dc3545';
+                ctx.lineWidth = 3;
+                drawArrow(ctx, cx, cy, cx + viewGradX*scale, cy + viewGradY*scale);
+
+                // 3-3. 현재 위치 점 표시
+                ctx.fillStyle = '#212529';
+                ctx.beginPath();
+                ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // 화살표 렌더링 헬퍼 함수
+        function drawArrow(ctx, fromX, fromY, toX, toY) {
+            const headLength = 12;
+            const dx = toX - fromX;
+            const dy = toY - fromY;
+            const angle = Math.atan2(dy, dx);
+            
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headLength * Math.cos(angle - Math.PI / 6), toY - headLength * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headLength * Math.cos(angle + Math.PI / 6), toY - headLength * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // 전체 렌더링 파이프라인 실행
+        drawGrid();
+        drawContours();
+        drawVectors();
+    </script>
+</body>
+</html>
