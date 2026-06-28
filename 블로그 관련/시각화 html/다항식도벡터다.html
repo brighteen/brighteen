@@ -1,0 +1,126 @@
+'''
+~
+코드 설명: 
+1차원 공간에서는 하나의 점(분류 기준)으로 나눌 수 없는 데이터를 
+다항식 차원(2차원 공간, x와 x^2)으로 확장하여 단 하나의 직선(선형)으로 분리하는 과정을 시각화한 HTML 문서입니다.
+Plotly.js를 사용하여 좌측에는 1차원 원본 데이터를, 우측에는 2차원으로 매핑된 데이터를 보여줍니다.
+
+이전 대화 참고: 
+다항식을 벡터 공간의 차원으로 취급하여(1차원 데이터를 2차원으로 확장) 
+비선형 문제를 선형 분류 문제로 치환한다는 이전 글의 수학적 개념을 코드로 시각화했습니다.
+~
+'''
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다항식 차원 확장을 통한 선형 분류</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 20px; background-color: #f8f9fa;}
+        .container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .graph-box { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 10px; }
+        h2 { color: #333; }
+        p { color: #666; max-width: 800px; margin: 0 auto 20px auto; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <h2>다항식 공간 차원 확장을 통한 선형 분류</h2>
+    <p>
+        빨간 점과 파란 점은 1차원 선상에 섞여 있어 단 하나의 점으로 두 그룹을 나눌 수 없습니다 (비선형 분리).<br>
+        하지만 <strong>x</strong> 값을 <strong>x²</strong> 축을 추가한 2차원 다항식 벡터 공간으로 매핑하면, 단 하나의 <strong>직선(Hyperplane)</strong>으로 완벽하게 분류할 수 있게 됩니다.
+    </p>
+
+    <div class="container">
+        <div class="graph-box">
+            <div id="plot1d" style="width: 500px; height: 500px;"></div>
+        </div>
+        <div class="graph-box">
+            <div id="plot2d" style="width: 500px; height: 500px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 생성
+        const xValues = [];
+        const class0_x = []; // 내부 (빨간색)
+        const class1_x = []; // 외부 (파란색)
+        
+        const class0_y_1d = [];
+        const class1_y_1d = [];
+        
+        const class0_y_2d = []; // x^2 값
+        const class1_y_2d = []; // x^2 값
+
+        // -3 부터 3 까지의 데이터 포인트 생성
+        for (let x = -3; x <= 3; x += 0.15) {
+            let px = x + (Math.random() * 0.2 - 0.1); // 약간의 노이즈 추가
+            xValues.push(px);
+
+            // -1.5 ~ 1.5 사이는 Class 0, 나머지는 Class 1
+            if (px > -1.5 && px < 1.5) {
+                class0_x.push(px);
+                class0_y_1d.push(0); 
+                class0_y_2d.push(px * px); 
+            } else {
+                class1_x.push(px);
+                class1_y_1d.push(0);
+                class1_y_2d.push(px * px);
+            }
+        }
+
+        // --- 좌측 그래프: 1차원 공간 ---
+        const trace1_class0 = {
+            x: class0_x, y: class0_y_1d,
+            mode: 'markers', type: 'scatter', name: 'Class 0',
+            marker: { color: 'red', size: 10, line: {color: 'darkred', width: 1} }
+        };
+
+        const trace1_class1 = {
+            x: class1_x, y: class1_y_1d,
+            mode: 'markers', type: 'scatter', name: 'Class 1',
+            marker: { color: 'blue', size: 10, line: {color: 'darkblue', width: 1} }
+        };
+
+        const layout1 = {
+            title: '1. 원래 데이터 (1차원 공간)',
+            xaxis: { title: 'x', range: [-4, 4] },
+            yaxis: { title: '', range: [-1, 1], showticklabels: false, zeroline: true, zerolinecolor: '#999' },
+            showlegend: true
+        };
+
+        Plotly.newPlot('plot1d', [trace1_class0, trace1_class1], layout1);
+
+        // --- 우측 그래프: 2차원 다항식 벡터 공간 ---
+        const trace2_class0 = {
+            x: class0_x, y: class0_y_2d,
+            mode: 'markers', type: 'scatter', name: 'Class 0',
+            marker: { color: 'red', size: 10, line: {color: 'darkred', width: 1} }
+        };
+
+        const trace2_class1 = {
+            x: class1_x, y: class1_y_2d,
+            mode: 'markers', type: 'scatter', name: 'Class 1',
+            marker: { color: 'blue', size: 10, line: {color: 'darkblue', width: 1} }
+        };
+
+        // 분류를 위한 초평면(직선) 추가 y = 2.25 (1.5의 제곱)
+        const trace2_hyperplane = {
+            x: [-4, 4], y: [2.25, 2.25],
+            mode: 'lines', type: 'scatter', name: '선형 결정 경계',
+            line: { color: 'green', dash: 'dash', width: 3 }
+        };
+
+        const layout2 = {
+            title: '2. 다항식 공간 매핑 (2차원 공간)',
+            xaxis: { title: 'x', range: [-4, 4] },
+            yaxis: { title: 'x²', range: [-1, 10] },
+            showlegend: true
+        };
+
+        Plotly.newPlot('plot2d', [trace2_class0, trace2_class1, trace2_hyperplane], layout2);
+    </script>
+</body>
+</html>

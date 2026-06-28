@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>행렬식과 기하학적 변환</title>
+<style>
+  body { font-family: monospace; display: flex; flex-direction: column; align-items: flex-start; padding: 20px; }
+  canvas { border: 1px solid black; margin-top: 15px; }
+  .slider-container { margin-bottom: 5px; }
+  label { display: inline-block; width: 20px; font-weight: bold; }
+  span.val { display: inline-block; width: 40px; text-align: right; }
+  #info { margin-top: 15px; font-weight: bold; }
+</style>
+</head>
+<body>
+  <div>행렬 A:</div>
+  <div class="slider-container">
+    <label>a:</label> 
+    <input type="range" id="a" min="-5" max="5" step="0.1" value="2"> 
+    <span class="val" id="val-a">2.0</span>
+  </div>
+  <div class="slider-container">
+    <label>b:</label> 
+    <input type="range" id="b" min="-5" max="5" step="0.1" value="1"> 
+    <span class="val" id="val-b">1.0</span>
+  </div>
+  <div class="slider-container">
+    <label>c:</label> 
+    <input type="range" id="c" min="-5" max="5" step="0.1" value="1"> 
+    <span class="val" id="val-c">1.0</span>
+  </div>
+  <div class="slider-container">
+    <label>d:</label> 
+    <input type="range" id="d" min="-5" max="5" step="0.1" value="2"> 
+    <span class="val" id="val-d">2.0</span>
+  </div>
+  
+  <div id="info"></div>
+  
+  <canvas id="canvas" width="400" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 변수 및 DOM 요소 매핑
+    const vars = ['a', 'b', 'c', 'd'];
+    const elements = {};
+    vars.forEach(v => {
+      elements[v] = {
+        slider: document.getElementById(v),
+        display: document.getElementById('val-' + v)
+      };
+    });
+    const info = document.getElementById('info');
+
+    const SCALE = 40;
+    const ORIGIN_X = 200;
+    const ORIGIN_Y = 200;
+    
+    // 변환 전 단위 정사각형 좌표
+    const unitSquare = [[0,0], [1,0], [1,1], [0,1]];
+
+    function draw() {
+      // 슬라이더 값 읽기
+      const a = parseFloat(elements.a.slider.value);
+      const b = parseFloat(elements.b.slider.value);
+      const c = parseFloat(elements.c.slider.value);
+      const d = parseFloat(elements.d.slider.value);
+
+      // 슬라이더 옆 텍스트 업데이트
+      vars.forEach(v => {
+        elements[v].display.innerText = parseFloat(elements[v].slider.value).toFixed(1);
+      });
+
+      // 행렬식 계산
+      const detA = a * d - b * c;
+      
+      // 결과 출력
+      let text = `det(A) = ${detA.toFixed(2)}<br>`;
+      if (Math.abs(detA) > 1e-6) {
+        text += `det(A⁻¹) = ${(1 / detA).toFixed(2)}`;
+      } else {
+        text += `det(A⁻¹) = 정의되지 않음 (역행렬 존재하지 않음)`;
+      }
+      info.innerHTML = text;
+
+      // 캔버스 초기화
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 배경 격자 렌더링
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for(let i=0; i<=canvas.width; i+=SCALE) {
+        ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
+        ctx.moveTo(0, i); ctx.lineTo(canvas.width, i);
+      }
+      ctx.stroke();
+
+      // x, y 축 렌더링
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.moveTo(0, ORIGIN_Y); ctx.lineTo(canvas.width, ORIGIN_Y);
+      ctx.moveTo(ORIGIN_X, 0); ctx.lineTo(ORIGIN_X, canvas.height);
+      ctx.stroke();
+
+      // 변환 전 단위 정사각형 렌더링 (점선)
+      ctx.strokeStyle = 'black';
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      unitSquare.forEach(([x, y], idx) => {
+        const px = ORIGIN_X + x * SCALE;
+        const py = ORIGIN_Y - y * SCALE; // 캔버스 y축 방향 조정
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.closePath();
+      ctx.stroke();
+      ctx.setLineDash([]); // 점선 해제
+
+      // 행렬 A 변환 렌더링 (파란색 다각형)
+      ctx.fillStyle = 'rgba(0, 0, 255, 0.3)';
+      ctx.strokeStyle = 'blue';
+      ctx.beginPath();
+      unitSquare.forEach(([x, y], idx) => {
+        // 행렬 곱셈: [x', y']^T = A * [x, y]^T
+        const nx = a * x + b * y;
+        const ny = c * x + d * y;
+        
+        const px = ORIGIN_X + nx * SCALE;
+        const py = ORIGIN_Y - ny * SCALE;
+        
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // 이벤트 리스너 바인딩
+    vars.forEach(v => {
+      elements[v].slider.addEventListener('input', draw);
+    });
+    
+    // 초기 렌더링
+    draw();
+  </script>
+</body>
+</html>
